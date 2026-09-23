@@ -152,6 +152,35 @@ else
   FAILED=1
 fi
 
+# Template drift. The stamps point at real commits of this repository, so the
+# cases read its history instead of faking one.
+current="$(git -C "$ROOT" log -1 --format=%h -- templates/AGENTS.project.md)"
+first="$(git -C "$ROOT" rev-list --max-parents=0 --abbrev-commit HEAD | tail -1)"
+stamp() { printf '\n<!-- adopted from templates/AGENTS.project.md @ %s -->\n' "$1" >> "$WORK/p/AGENTS.md"; }
+
+p="$(fixture)"; stamp "$current"
+expect "stamp at the current template" 0 "adopted from the current template"
+
+p="$(fixture)"; stamp "$first"
+expect "template changed since adoption warns" 0 "changed since adoption"
+
+p="$(fixture)"; stamp deadbeef
+expect "stamp at an unknown commit warns" 0 "unknown to"
+
+echo
+echo "adopt.sh"
+
+CASES=$((CASES + 1))
+d="$WORK/adopted"; mkdir -p "$d"
+"$ROOT/adopt.sh" "$d" >/dev/null && "$ROOT/adopt.sh" "$d" >/dev/null
+n="$(grep -c "adopted from templates/AGENTS.project.md @ $current" "$d/AGENTS.md")"
+if [ "$n" -eq 1 ]; then
+  printf '  ok    %s\n' "stamps the template commit once"
+else
+  printf '  FAIL  %s — found %s stamp(s), expected 1\n' "stamps the template commit once" "$n"
+  FAILED=1
+fi
+
 echo
 if [ "$FAILED" -eq 0 ]; then
   echo "$CASES cases, all passed"

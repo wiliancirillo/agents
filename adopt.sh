@@ -13,6 +13,7 @@ copy() {
   local src="$1" dst="$2"
   if [ -e "$dst" ]; then
     echo "SKIP (exists): $dst"
+    return 1
   else
     cp "$src" "$dst"
     created_any=1
@@ -21,8 +22,13 @@ copy() {
 }
 
 mkdir -p "$DEST/.agents/decisions"
-copy "$ROOT/templates/AGENTS.project.md" "$DEST/AGENTS.md"
-copy "$ROOT/templates/PROJECT_MEMORY.md" "$DEST/.agents/PROJECT_MEMORY.md"
+# The stamp records which template commit the project copied, so check.sh can
+# tell when the template moved on. The copy never updates by itself.
+if copy "$ROOT/templates/AGENTS.project.md" "$DEST/AGENTS.md"; then
+  rev="$(git -C "$ROOT" log -1 --format=%h -- templates/AGENTS.project.md 2>/dev/null || true)"
+  [ -n "$rev" ] && printf '\n<!-- adopted from templates/AGENTS.project.md @ %s -->\n' "$rev" >> "$DEST/AGENTS.md"
+fi
+copy "$ROOT/templates/PROJECT_MEMORY.md" "$DEST/.agents/PROJECT_MEMORY.md" || true
 
 if [ -e "$DEST/CLAUDE.md" ] || [ -L "$DEST/CLAUDE.md" ]; then
   echo "SKIP (exists): $DEST/CLAUDE.md"

@@ -63,7 +63,7 @@ Sem sobrescrever o que já existe.
 ./check.sh <caminho-do-projeto>
 ```
 
-Confere um projeto adotado contra a política: estrutura no lugar, placeholders do template já preenchidos, entradas de memória dentro do limite de forma, decisões cruzadas com a memória (sem órfãs nem links quebrados), baseline de teste com data, e nenhuma string com cara de credencial nos arquivos de instrução.
+Confere um projeto adotado contra a política: estrutura no lugar, placeholders do template já preenchidos, entradas de memória dentro do limite de forma, decisões cruzadas com a memória (sem órfãs nem links quebrados), baseline de teste com data, template sem mudanças desde a adoção, e nenhuma string com cara de credencial nos arquivos de instrução.
 
 Somente leitura — reporta, nunca edita. Sai com 1 em erro, 0 em aviso. Os limites de tamanho podem ser ajustados: `MEM_WARN=400 MEM_FAIL=1200 ./check.sh <projeto>`.
 
@@ -73,7 +73,7 @@ Somente leitura — reporta, nunca edita. Sai com 1 em erro, 0 em aviso. Os limi
 
 Cada caso monta um projeto de mentira, quebra exatamente uma coisa e exige que o `check.sh` reporte — mais um caso que não quebra nada e exige silêncio. Um check que para de ler continua imprimindo `ok`, e isso é indistinguível de um check que funciona.
 
-Verificado em 2026-09-04, bash 5.3: `./test-check.sh` (17 casos, todos passando); `shellcheck` limpo em `wire.sh`, `adopt.sh`, `check.sh` e `test-check.sh`; `./check.sh .` passa sem avisos desde que este repositório adotou o próprio padrão. Nos projetos adotados, em 2026-08-31: `nightjar` passa (23 avisos de forma) e `astr` falha (8 entradas acima do limite, a maior com 6.339 caracteres).
+Verificado em 2026-09-23, bash 5.3: `./test-check.sh` (21 casos, todos passando); `shellcheck` limpo em `wire.sh`, `adopt.sh`, `check.sh` e `test-check.sh`; `./check.sh .` passa sem avisos desde que este repositório adotou o próprio padrão. Nos projetos adotados, em 2026-08-31: `nightjar` passa (23 avisos de forma) e `astr` falha (8 entradas acima do limite, a maior com 6.339 caracteres).
 
 ## Prioridade das instruções
 

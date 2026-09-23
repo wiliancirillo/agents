@@ -43,7 +43,7 @@ Lint:                shellcheck wire.sh adopt.sh check.sh test-check.sh
 Verify a project:    ./check.sh <project-dir>
 ```
 
-Verificado em 2026-09-04, bash 5.3: `./test-check.sh` (17 casos verdes), `shellcheck` limpo nos quatro scripts, `./check.sh .` sem avisos.
+Verificado em 2026-09-23, bash 5.3: `./test-check.sh` (21 casos verdes), `shellcheck` limpo nos quatro scripts, `./check.sh .` sem avisos.
 
 ## Conventions
 
@@ -64,7 +64,7 @@ Verificado em 2026-09-04, bash 5.3: `./test-check.sh` (17 casos verdes), `shellc
 
 - Editing `AGENTS.md` changes behaviour in every tool on this machine at once, with no staging step.
 - `templates/AGENTS.project.md` deliberately restates rules from `AGENTS.md`; the mirrored sections are mapped in `templates/README.md` and drift silently if only one side is edited.
-- An adopted project keeps its own copy of the rules from the day it was adopted: fixing the template does not reach it.
+- An adopted project keeps its own copy of the rules from the day it was adopted: fixing the template does not reach it. `adopt.sh` stamps the template commit; `check.sh` warns when the template moved on. Projects adopted before the stamp carry none.
 - `check.sh` thresholds (400/1200) are calibrated on two adopted projects, not derived. Treat a failure as a question, not a verdict.
 
 ## Canonical documentation

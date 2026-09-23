@@ -25,4 +25,4 @@ As seções abaixo espelham o `../AGENTS.md` e precisam ser atualizadas junto co
 
 O texto não é idêntico por construção — o canônico fala em primeira pessoa ("me", "my"), o template fala do usuário em terceira pessoa. Comparar por conteúdo, não por diff literal.
 
-Ao mudar uma regra em `../AGENTS.md`, verificar se ela existe aqui. Projetos já adotados não recebem a correção automaticamente: cada `AGENTS.md` de projeto é um arquivo independente a partir da adoção.
+Ao mudar uma regra em `../AGENTS.md`, verificar se ela existe aqui. Projetos já adotados não recebem a correção automaticamente: cada `AGENTS.md` de projeto é um arquivo independente a partir da adoção. O `adopt.sh` grava no fim dele o commit do template copiado (`<!-- adopted from templates/AGENTS.project.md @ <hash> -->`), e o `check.sh` avisa quando o template mudou depois desse commit. Projetos adotados antes disso não têm a marca e não são verificados.
