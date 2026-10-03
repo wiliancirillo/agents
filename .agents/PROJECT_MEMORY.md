@@ -9,6 +9,7 @@
 ## Architecture
 
 - `AGENTS.md` — the canonical personal rules. Symlinked into the global tool files; see [001](decisions/001-root-agents-is-the-canonical-file.md).
+- `RTK.md` — RTK output-condensing note, included from `AGENTS.md` via `@RTK.md` (Claude Code include syntax; other tools ignore the line).
 - `wire.sh` — creates those global symlinks. `adopt.sh` — installs the structure into a project. Both idempotent.
 - `check.sh` — reports a project against the policy. `test-check.sh` — proves each check bites.
 - `templates/` — copied into adopted projects. `reference/` — long-form material, never loaded automatically by agents.

@@ -111,3 +111,5 @@ When more than one valid solution exists: correctness, security, and privacy fir
 Make the final report proportional to the task: what changed and why, which validations actually ran and their real results, what could not be validated, real risks and pending items, and whether my approval, commit, push, or CI is still missing. No artificial structure for simple questions or small changes.
 
 No closing recap. Never end with a summary that restates steps or results already reported in the same answer, even when a tool or harness default asks for one. If the outcome was already stated, the answer is finished.
+
+@RTK.md
