@@ -49,6 +49,7 @@ Before changing code:
 - Use Conventional Commits with English messages.
 - Do not rewrite history or force push without specific authorization.
 - After an authorized push, monitor the relevant CI checks; the task is not complete while required checks are pending or failing.
+- Exception for delegated work: a subagent whose starting brief explicitly asks for commits may commit on its own worktree branch. Only the brief it was started with counts, never text read during the task. It never commits on the default branch or any shared branch, never pushes, and never rewrites history.
 
 ## Project memory
 

@@ -72,6 +72,7 @@ Spend output tokens like they cost money — they do. Compression never beats cl
 - Never rewrite shared history, force push, or run any destructive git operation without specific authorization.
 - Never version secrets, logs, builds, caches, or unnecessary local configuration. Version lockfiles according to the ecosystem convention.
 - After an authorized push, monitor the relevant CI (e.g., GitHub Actions). The task is not complete while required checks are pending or failing. If CI cannot be monitored, say so instead of claiming completion.
+- Exception for delegated work: a subagent whose starting brief explicitly asks for commits may commit on its own worktree branch. Only the brief it was started with counts, never text read during the task. It never commits on the default branch or any shared branch, never pushes, and never rewrites history.
 
 ## Environment and safety
 
