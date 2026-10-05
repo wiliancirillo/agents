@@ -85,7 +85,7 @@ Verificado em 2026-09-23, bash 5.3: `./test-check.sh` (21 casos, todos passando)
 
 Convenção: todo projeto adotado nasce com o `tech-lead` como agente padrão da sessão. Ele planeja, decide e delega. Os outros papéis, como engenheiro, revisor e testador, são criados pelo próprio tech lead em `.claude/agents/` do projeto, quando o trabalho pede. Ver a [decisão 002](.agents/decisions/002-every-adopted-project-starts-with-a-tech-lead.md).
 
-Projetos adotados antes dessa convenção não a recebem.
+Projetos adotados antes dessa convenção não a recebem. Rodar o `adopt.sh` de novo num deles instala o tech lead e o `settings.json`; é o jeito explícito de aderir.
 
 ## Prioridade das instruções
 

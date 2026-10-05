@@ -68,7 +68,7 @@ Verificado em 2026-09-23, bash 5.3: `./test-check.sh` (21 casos verdes), `shellc
 - Editing `AGENTS.md` changes behaviour in every tool on this machine at once, with no staging step.
 - `subagents/` must stay project-agnostic: no project names, stacks, paths, or decision numbers. The delegated-work commit exception in `AGENTS.md` (mirrored in the template) is what lets the tech lead's agents commit; change both together.
 - `templates/AGENTS.project.md` deliberately restates rules from `AGENTS.md`; the mirrored sections are mapped in `templates/README.md` and drift silently if only one side is edited.
-- The adopted `.claude/agents/tech-lead.md` is a stamped copy too; `check.sh` warns when `subagents/tech-lead.md` moved on. `mailbridgr` and `nfepack` predate the convention and stay without it.
+- The adopted `.claude/agents/tech-lead.md` is a stamped copy too; `check.sh` warns when `subagents/tech-lead.md` moved on. `mailbridgr` and `nfepack` predate the convention; running `adopt.sh` on them again would install it.
 - An adopted project keeps its own copy of the rules from the day it was adopted: fixing the template does not reach it. `adopt.sh` stamps the template commit; `check.sh` warns when the template moved on. Projects adopted before the stamp carry none.
 - `check.sh` thresholds (400/1200) are calibrated on two adopted projects, not derived. Treat a failure as a question, not a verdict.
 

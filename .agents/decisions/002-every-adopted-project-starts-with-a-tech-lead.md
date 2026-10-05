@@ -19,7 +19,7 @@ The tech lead is the only role created at adoption. Every other role is written 
 
 The delegated-work exception in `AGENTS.md` and in `templates/AGENTS.project.md` lets agents started by a brief commit on their own worktree branch, never on the default or a shared branch, never with a push.
 
-Projects adopted before this decision do not receive the convention.
+Projects adopted before this decision do not receive the convention unless `adopt.sh` runs on them again: it creates the tech lead and the settings file wherever they are missing. Running it again is the explicit way for an older project to join.
 
 ## Alternatives considered
 

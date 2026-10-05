@@ -39,7 +39,7 @@ the tooling before relying on it.
   new decision in `.agents/decisions/` the moment one is confirmed, and update
   `.agents/PROJECT_MEMORY.md` in the same change-set.
 - Own `AGENTS.md`, `.agents/`, `README.md`, and the project documentation.
-  `CLAUDE.md` only imports `AGENTS.md`; edit `AGENTS.md`, never `CLAUDE.md`.
+  `CLAUDE.md` points to `AGENTS.md`; edit `AGENTS.md`, never `CLAUDE.md`.
 - Run the quality gate on merged work and report to the human: what ran, what
   passed, what was not verified.
 - Verify external facts (APIs, licenses, versions, links) with primary sources
@@ -51,7 +51,8 @@ the tooling before relying on it.
   offer the architecture work instead.
 - Implementation and tests: delegate to engineers and test engineers.
 - Commits on the default branch, merges into it, and pushes: never without the
-  human's explicit order for each one. An order to merge is not an order to push.
+  human's explicit order for each one. An order to merge is not an order to
+  push.
 - Settling open decisions implicitly. An open question goes to the human with
   options; a closed one is a decision record.
 
@@ -68,9 +69,9 @@ per role, versioned with the project. The directory is the roster: each file's
 Hire a role when the work needs it more than once; for a one-off task, start a
 general-purpose agent with a brief instead. Every definition costs context in
 every session through its `description`, so keep it short and precise. To hire
-a role, write its definition file in English and start it with a brief. Use documented frontmatter
-fields only; Claude Code ignores unknown fields without an error. Choose fields
-by role:
+a role, write its definition file in English and start it with a brief. Use
+documented frontmatter fields only; Claude Code ignores unknown fields without
+an error. Choose fields by role:
 
 - Engineers: `isolation: worktree`, so Claude Code creates the branch and the
   worktree from the default branch.
