@@ -143,6 +143,43 @@ drift() {
 drift "$AGENTS" templates/AGENTS.project.md
 drift "$DEST/.claude/agents/tech-lead.md" subagents/tech-lead.md
 
+# --- tech lead as session agent ----------------------------------------------
+# Only for projects that carry the tech lead; older adoptions are left alone.
+# agent_of <settings file>: the string value of "agent", empty when unset.
+agent_of() {
+  grep -oE '"agent"[[:space:]]*:[[:space:]]*"[^"]*"' "$1" 2>/dev/null | head -1 | sed -E 's/.*"([^"]*)"$/\1/' || true
+}
+
+LEAD="$DEST/.claude/agents/tech-lead.md"
+SETTINGS="$DEST/.claude/settings.json"
+LOCAL="$DEST/.claude/settings.local.json"
+if [ -f "$LEAD" ]; then
+  agent="$(agent_of "$SETTINGS")"
+  if [ ! -f "$SETTINGS" ]; then
+    warn ".claude/settings.json is missing — the tech lead is not the session agent"
+  elif [ -z "$agent" ]; then
+    warn '.claude/settings.json does not set "agent" — the tech lead is not the session agent'
+  elif [ "$agent" != "tech-lead" ]; then
+    warn ".claude/settings.json sets agent \"$agent\", not \"tech-lead\""
+  else
+    ok "tech-lead is the session agent"
+  fi
+
+  local_agent="$(agent_of "$LOCAL")"
+  if [ -n "$local_agent" ] && [ "$local_agent" != "tech-lead" ]; then
+    warn ".claude/settings.local.json overrides the session agent with \"$local_agent\""
+  fi
+
+  # Tracked files are never reported: they are versioned whatever the rules say.
+  if git -C "$DEST" rev-parse --git-dir >/dev/null 2>&1; then
+    for f in .claude/agents/tech-lead.md .claude/settings.json; do
+      if git -C "$DEST" check-ignore -q "$f"; then
+        warn "git ignores $f — version it so every clone starts with the tech lead"
+      fi
+    done
+  fi
+fi
+
 # --- secrets -----------------------------------------------------------------
 if grep -rInE '(password|secret|api[_-]?key|token)\s*[:=]\s*["'"'"'][^"'"'"']{8,}' "$AGENTS" "$MEM" >/dev/null 2>&1; then
   err "possible credential in AGENTS.md or PROJECT_MEMORY.md"

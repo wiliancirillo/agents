@@ -45,14 +45,15 @@ Projects adopted before this decision do not receive the convention unless `adop
 ### Negative or trade-offs
 
 - Each project holds a copy; fixes to `subagents/tech-lead.md` are ported by hand. `adopt.sh` stamps the source commit and `check.sh` warns on drift.
-- `adopt.sh` cannot edit an existing `.claude/settings.json` without JSON tooling; it only says what to add.
+- `adopt.sh` cannot edit an existing `.claude/settings.json` without JSON tooling; it only says what to add, or warns when another agent is set.
+- A higher-precedence setting wins over the project's: `claude --agent`, `.claude/settings.local.json`, or managed settings. `check.sh` warns when the project or local settings name another agent, or when git ignores the tech lead or the settings file.
 - The convention targets Claude Code; other tools read `AGENTS.md` only.
 
 ## Verification
 
 Run `./adopt.sh` on an empty directory: it creates `.claude/agents/tech-lead.md` with a stamp and `.claude/settings.json` with `"agent": "tech-lead"`. `./check.sh` on that directory reports the tech lead as adopted from the current source.
 
-`./test-check.sh` covers both: the adoption cases check the tech lead stamp and the settings file, and the check cases check tech lead drift.
+`./test-check.sh` covers both: the adoption cases check the tech lead stamp, the settings file, and ignore rules; the check cases check tech lead drift, the session agent, and ignore rules.
 
 ## References
 

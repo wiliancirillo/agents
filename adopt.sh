@@ -46,7 +46,12 @@ if [ ! -e "$SETTINGS" ]; then
   created_any=1
   echo "created: $SETTINGS"
 elif grep -Eq '"agent"[[:space:]]*:' "$SETTINGS"; then
-  echo "SKIP (agent already set): $SETTINGS"
+  agent="$(grep -oE '"agent"[[:space:]]*:[[:space:]]*"[^"]*"' "$SETTINGS" | head -1 | sed -E 's/.*"([^"]*)"$/\1/' || true)"
+  if [ "$agent" = "tech-lead" ]; then
+    echo "SKIP (agent already set): $SETTINGS"
+  else
+    echo "WARNING: $SETTINGS sets agent \"$agent\", not \"tech-lead\" — left unchanged."
+  fi
 else
   echo "ACTION: add \"agent\": \"tech-lead\" to $SETTINGS by hand."
 fi
@@ -62,7 +67,15 @@ fi
 if [ -f "$DEST/.gitignore" ] && grep -Eq '(^|/)\.agents' "$DEST/.gitignore"; then
   echo "WARNING: .agents appears in $DEST/.gitignore — remove it so the memory is versioned."
 fi
-if [ -f "$DEST/.gitignore" ] && grep -Eq '^/?\.claude/?(\*)?$' "$DEST/.gitignore"; then
+# git knows every ignore rule (nested files, globs, negations); outside a git
+# repository, fall back to the obvious pattern.
+if git -C "$DEST" rev-parse --git-dir >/dev/null 2>&1; then
+  for f in .claude/agents/tech-lead.md .claude/settings.json; do
+    if git -C "$DEST" check-ignore -q "$f"; then
+      echo "WARNING: git ignores $f in $DEST — version it so every clone starts with the tech lead."
+    fi
+  done
+elif [ -f "$DEST/.gitignore" ] && grep -Eq '^/?\.claude/?(\*)?$' "$DEST/.gitignore"; then
   echo "WARNING: .claude is in $DEST/.gitignore — version .claude/agents/ and .claude/settings.json."
 fi
 

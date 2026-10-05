@@ -180,6 +180,36 @@ expect "tech lead stamp at the current source" 0 "tech-lead.md was adopted from 
 p="$(fixture)"; lead "$first"
 expect "tech lead changed since adoption warns" 0 "subagents/tech-lead.md changed since adoption"
 
+# The tech lead only works as the session agent when the settings say so.
+# settings <file> <json>
+settings() { mkdir -p "$WORK/p/.claude"; printf '%s\n' "$2" > "$WORK/p/.claude/$1"; }
+
+p="$(fixture)"; lead "$lead_current"; settings settings.json '{ "agent": "tech-lead" }'
+expect "tech lead set as session agent passes" 0 "passed with 0 warning"
+
+p="$(fixture)"; lead "$lead_current"
+expect "tech lead without settings.json warns" 0 "settings.json is missing"
+
+p="$(fixture)"; lead "$lead_current"; settings settings.json '{ "model": "opus" }'
+expect "settings.json without agent warns" 0 'does not set "agent"'
+
+p="$(fixture)"; lead "$lead_current"; settings settings.json '{ "agent": "reviewer" }'
+expect "settings.json with another agent warns" 0 'sets agent "reviewer", not "tech-lead"'
+
+p="$(fixture)"; lead "$lead_current"; settings settings.json '{ "agent": "tech-lead" }'; settings settings.local.json '{ "agent": "reviewer" }'
+expect "settings.local.json overriding the agent warns" 0 'settings.local.json overrides the session agent with "reviewer"'
+
+p="$(fixture)"; settings settings.json '{ "agent": "reviewer" }'
+expect "project without the tech lead is not checked" 0 "passed with 0 warning"
+
+p="$(fixture)"; lead "$lead_current"; settings settings.json '{ "agent": "tech-lead" }'
+git -C "$p" init -q; printf '.claude/agents/\n' > "$p/.gitignore"
+expect "git ignoring the tech lead warns" 0 "git ignores .claude/agents/tech-lead.md"
+
+p="$(fixture)"; lead "$lead_current"; settings settings.json '{ "agent": "tech-lead" }'
+git -C "$p" init -q; printf '.claude/settings.json\n' > "$p/.gitignore"
+expect "git ignoring settings.json warns" 0 "git ignores .claude/settings.json"
+
 echo
 echo "adopt.sh"
 
@@ -224,6 +254,37 @@ else
   printf '%s\n' "$out" | sed 's/^/          /'
   FAILED=1
 fi
+
+# adopt_expect <name> <project dir> <substring the output must contain>
+# The settings file, when present, must come out byte for byte unchanged.
+adopt_expect() {
+  local name="$1" dir="$2" want="$3" out before=""
+  CASES=$((CASES + 1))
+  [ -f "$dir/.claude/settings.json" ] && before="$(cat "$dir/.claude/settings.json")"
+  out="$("$ROOT/adopt.sh" "$dir" 2>&1)"
+  if ! printf '%s' "$out" | grep -qF -- "$want"; then
+    printf '  FAIL  %s — output lacks: %s\n' "$name" "$want"
+    printf '%s\n' "$out" | sed 's/^/          /'
+    FAILED=1
+  elif [ -n "$before" ] && [ "$before" != "$(cat "$dir/.claude/settings.json")" ]; then
+    printf '  FAIL  %s — settings.json was edited\n' "$name"
+    FAILED=1
+  else
+    printf '  ok    %s\n' "$name"
+  fi
+}
+
+d="$WORK/other-agent"; mkdir -p "$d/.claude"
+printf '{ "agent": "reviewer" }\n' > "$d/.claude/settings.json"
+adopt_expect "existing settings with another agent: warns, never edits" "$d" 'sets agent "reviewer", not "tech-lead"'
+
+d="$WORK/ignored"; mkdir -p "$d"; git -C "$d" init -q
+printf '.claude/settings.json\n' > "$d/.gitignore"
+adopt_expect "git ignoring settings.json warns at adoption" "$d" "git ignores .claude/settings.json"
+
+d="$WORK/ignored-agents"; mkdir -p "$d"; git -C "$d" init -q
+printf '.claude/agents/\n' > "$d/.gitignore"
+adopt_expect "git ignoring the tech lead warns at adoption" "$d" "git ignores .claude/agents/tech-lead.md"
 
 echo
 if [ "$FAILED" -eq 0 ]; then
