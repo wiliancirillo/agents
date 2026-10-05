@@ -167,6 +167,19 @@ expect "template changed since adoption warns" 0 "changed since adoption"
 p="$(fixture)"; stamp deadbeef
 expect "stamp at an unknown commit warns" 0 "unknown to"
 
+# The adopted tech lead carries its own stamp, checked the same way.
+lead_current="$(git -C "$ROOT" log -1 --format=%h -- subagents/tech-lead.md)"
+lead() {
+  mkdir -p "$WORK/p/.claude/agents"
+  printf -- '---\nname: tech-lead\n---\n\n<!-- adopted from subagents/tech-lead.md @ %s -->\n' "$1" > "$WORK/p/.claude/agents/tech-lead.md"
+}
+
+p="$(fixture)"; lead "$lead_current"
+expect "tech lead stamp at the current source" 0 "tech-lead.md was adopted from the current subagents/tech-lead.md"
+
+p="$(fixture)"; lead "$first"
+expect "tech lead changed since adoption warns" 0 "subagents/tech-lead.md changed since adoption"
+
 echo
 echo "adopt.sh"
 
@@ -178,6 +191,19 @@ if [ "$n" -eq 1 ]; then
   printf '  ok    %s\n' "stamps the template commit once"
 else
   printf '  FAIL  %s — found %s stamp(s), expected 1\n' "stamps the template commit once" "$n"
+  FAILED=1
+fi
+
+CASES=$((CASES + 1))
+d="$WORK/configured"; mkdir -p "$d/.claude"
+printf '{ "model": "opus" }\n' > "$d/.claude/settings.json"
+cp "$d/.claude/settings.json" "$WORK/settings.before"
+out="$("$ROOT/adopt.sh" "$d" 2>&1)"
+if printf '%s' "$out" | grep -qF 'ACTION: add "agent": "tech-lead"' && cmp -s "$WORK/settings.before" "$d/.claude/settings.json"; then
+  printf '  ok    %s\n' "existing settings without agent: asks, never edits"
+else
+  printf '  FAIL  %s\n' "existing settings without agent: asks, never edits"
+  printf '%s\n' "$out" | sed 's/^/          /'
   FAILED=1
 fi
 

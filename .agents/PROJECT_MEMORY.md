@@ -45,7 +45,7 @@ Lint:                shellcheck wire.sh adopt.sh check.sh test-check.sh
 Verify a project:    ./check.sh <project-dir>
 ```
 
-Verificado em 2026-09-23, bash 5.3: `./test-check.sh` (21 casos verdes), `shellcheck` limpo nos quatro scripts, `./check.sh .` sem avisos.
+Verificado em 2026-10-05, bash 5.3: `./test-check.sh` (24 casos verdes), `shellcheck` limpo nos quatro scripts, `./check.sh .` sem avisos.
 
 ## Conventions
 
