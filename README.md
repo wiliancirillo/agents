@@ -24,6 +24,8 @@ agents/
 │   ├── AGENTS.project.md
 │   ├── PROJECT_MEMORY.md
 │   └── DECISION.md
+├── subagents/
+│   └── tech-lead.md
 └── reference/
     ├── DEVELOPMENT-GUIDELINES.md
     ├── SECURITY-AND-PRIVACY.md
@@ -54,6 +56,8 @@ Esse script prepara um repositório para seguir a mesma estrutura, criando:
 - `CLAUDE.md` apontando para ele
 - `.agents/PROJECT_MEMORY.md`
 - `.agents/decisions/`
+- `.claude/agents/tech-lead.md`, cópia de `subagents/tech-lead.md`
+- `.claude/settings.json` com `"agent": "tech-lead"`; se o arquivo já existe, o script só diz o que adicionar
 
 Sem sobrescrever o que já existe.
 
@@ -63,7 +67,7 @@ Sem sobrescrever o que já existe.
 ./check.sh <caminho-do-projeto>
 ```
 
-Confere um projeto adotado contra a política: estrutura no lugar, placeholders do template já preenchidos, entradas de memória dentro do limite de forma, decisões cruzadas com a memória (sem órfãs nem links quebrados), baseline de teste com data, template sem mudanças desde a adoção, e nenhuma string com cara de credencial nos arquivos de instrução.
+Confere um projeto adotado contra a política: estrutura no lugar, placeholders do template já preenchidos, entradas de memória dentro do limite de forma, decisões cruzadas com a memória (sem órfãs nem links quebrados), baseline de teste com data, template e tech lead sem mudanças desde a adoção, e nenhuma string com cara de credencial nos arquivos de instrução.
 
 Somente leitura — reporta, nunca edita. Sai com 1 em erro, 0 em aviso. Os limites de tamanho podem ser ajustados: `MEM_WARN=400 MEM_FAIL=1200 ./check.sh <projeto>`.
 
@@ -74,6 +78,14 @@ Somente leitura — reporta, nunca edita. Sai com 1 em erro, 0 em aviso. Os limi
 Cada caso monta um projeto de mentira, quebra exatamente uma coisa e exige que o `check.sh` reporte — mais um caso que não quebra nada e exige silêncio. Um check que para de ler continua imprimindo `ok`, e isso é indistinguível de um check que funciona.
 
 Verificado em 2026-09-23, bash 5.3: `./test-check.sh` (21 casos, todos passando); `shellcheck` limpo em `wire.sh`, `adopt.sh`, `check.sh` e `test-check.sh`; `./check.sh .` passa sem avisos desde que este repositório adotou o próprio padrão. Nos projetos adotados, em 2026-08-31: `nightjar` passa (23 avisos de forma) e `astr` falha (8 entradas acima do limite, a maior com 6.339 caracteres).
+
+### 4. Subagents
+
+`subagents/` guarda definições de subagents do Claude Code, genéricas para qualquer projeto.
+
+Convenção: todo projeto adotado nasce com o `tech-lead` como agente padrão da sessão. Ele planeja, decide e delega. Os outros papéis, como engenheiro, revisor e testador, são criados pelo próprio tech lead em `.claude/agents/` do projeto, quando o trabalho pede. Ver a [decisão 002](.agents/decisions/002-every-adopted-project-starts-with-a-tech-lead.md).
+
+Projetos adotados antes dessa convenção não a recebem.
 
 ## Prioridade das instruções
 
@@ -88,7 +100,7 @@ Quando houver conflito:
 Cada camada tem um idioma fixo:
 
 - **Português**: este `README.md` e `reference/`. São material meu e para leitura humana.
-- **Inglês**: `AGENTS.md` e `templates/`. São artefatos que vivem dentro de repositórios de código, junto com commits, identificadores e documentação técnica.
+- **Inglês**: `AGENTS.md`, `templates/` e `subagents/`. São artefatos que vivem dentro de repositórios de código, junto com commits, identificadores e documentação técnica.
 
 A regra que os agentes seguem é a mesma: falam comigo em português, escrevem código e artefatos técnicos em inglês.
 

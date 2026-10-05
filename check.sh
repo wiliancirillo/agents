@@ -115,24 +115,33 @@ if grep -qiE '(tests? (green|passing)|testes verdes|[0-9]+ (tests?|testes))' "$M
   fi
 fi
 
-# --- template drift (adopt.sh stamps the template commit it copied) ---------
-# Adopted rules never update by themselves. Projects adopted before the stamp
+# --- template drift (adopt.sh stamps the source commit it copied) ----------
+# Adopted copies never update by themselves. Files adopted before the stamp
 # existed carry none and are skipped.
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-rev="$(grep -oE 'adopted from templates/AGENTS\.project\.md @ [0-9a-f]+' "$AGENTS" | head -1 | awk '{print $NF}' || true)"
-if [ -n "$rev" ] && git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+
+# drift <adopted file> <source path inside this repository>
+drift() {
+  local file="$1" src="$2" name rev changed
+  name="${file#"$DEST"/}"
+  [ -f "$file" ] || return 0
+  rev="$(grep -oE "adopted from ${src//./\\.} @ [0-9a-f]+" "$file" | head -1 | awk '{print $NF}' || true)"
+  [ -n "$rev" ] && git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || return 0
   if ! git -C "$ROOT" cat-file -e "$rev^{commit}" 2>/dev/null; then
-    warn "AGENTS.md was adopted from template commit $rev, unknown to $ROOT"
-  else
-    changed="$(git -C "$ROOT" log --oneline "$rev..HEAD" -- templates/AGENTS.project.md)"
-    if [ -n "$changed" ]; then
-      warn "templates/AGENTS.project.md changed since adoption ($rev) — port by hand:"
-      echo "$changed" | indent
-    else
-      ok "AGENTS.md was adopted from the current template ($rev)"
-    fi
+    warn "$name was adopted from commit $rev, unknown to $ROOT"
+    return 0
   fi
-fi
+  changed="$(git -C "$ROOT" log --oneline "$rev..HEAD" -- "$src")"
+  if [ -n "$changed" ]; then
+    warn "$src changed since adoption ($rev) — port by hand into $name:"
+    echo "$changed" | indent
+  else
+    ok "$name was adopted from the current $src ($rev)"
+  fi
+}
+
+drift "$AGENTS" templates/AGENTS.project.md
+drift "$DEST/.claude/agents/tech-lead.md" subagents/tech-lead.md
 
 # --- secrets -----------------------------------------------------------------
 if grep -rInE '(password|secret|api[_-]?key|token)\s*[:=]\s*["'"'"'][^"'"'"']{8,}' "$AGENTS" "$MEM" >/dev/null 2>&1; then
