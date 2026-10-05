@@ -2,7 +2,7 @@
 
 These rules apply to every AI assistant or coding agent working with me, in any tool, on any machine. The current explicit request and a project's own `AGENTS.md` take precedence over this file.
 
-Canonical source: `~/Projects/agents/AGENTS.md` (github.com/alatarithron/agents). Global tool files such as `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` are symlinks to this file.
+Canonical source: `~/Projects/agents/AGENTS.md` (github.com/wiliancirillo/agents). Global tool files such as `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` are symlinks to this file.
 
 ## Instruction priority
 
