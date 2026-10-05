@@ -195,6 +195,24 @@ else
 fi
 
 CASES=$((CASES + 1))
+n="$(grep -c "adopted from subagents/tech-lead.md @ $lead_current" "$d/.claude/agents/tech-lead.md" 2>/dev/null)"
+n="${n:-0}"
+if [ "$n" -eq 1 ]; then
+  printf '  ok    %s\n' "stamps the tech lead commit once"
+else
+  printf '  FAIL  %s — found %s stamp(s), expected 1\n' "stamps the tech lead commit once" "$n"
+  FAILED=1
+fi
+
+CASES=$((CASES + 1))
+if grep -Eq '"agent"[[:space:]]*:[[:space:]]*"tech-lead"' "$d/.claude/settings.json" 2>/dev/null; then
+  printf '  ok    %s\n' "creates settings.json with the tech lead as session agent"
+else
+  printf '  FAIL  %s\n' "creates settings.json with the tech lead as session agent"
+  FAILED=1
+fi
+
+CASES=$((CASES + 1))
 d="$WORK/configured"; mkdir -p "$d/.claude"
 printf '{ "model": "opus" }\n' > "$d/.claude/settings.json"
 cp "$d/.claude/settings.json" "$WORK/settings.before"

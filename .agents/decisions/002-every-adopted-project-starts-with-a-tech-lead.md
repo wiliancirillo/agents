@@ -52,6 +52,8 @@ Projects adopted before this decision do not receive the convention unless `adop
 
 Run `./adopt.sh` on an empty directory: it creates `.claude/agents/tech-lead.md` with a stamp and `.claude/settings.json` with `"agent": "tech-lead"`. `./check.sh` on that directory reports the tech lead as adopted from the current source.
 
+`./test-check.sh` covers both: the adoption cases check the tech lead stamp and the settings file, and the check cases check tech lead drift.
+
 ## References
 
 - `subagents/tech-lead.md`, `adopt.sh`, `check.sh`, `AGENTS.md` (Git, commits, push, and CI)

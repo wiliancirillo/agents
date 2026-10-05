@@ -77,7 +77,7 @@ Somente leitura — reporta, nunca edita. Sai com 1 em erro, 0 em aviso. Os limi
 
 Cada caso monta um projeto de mentira, quebra exatamente uma coisa e exige que o `check.sh` reporte — mais um caso que não quebra nada e exige silêncio. Um check que para de ler continua imprimindo `ok`, e isso é indistinguível de um check que funciona.
 
-Verificado em 2026-10-05, bash 5.3: `./test-check.sh` (24 casos, todos passando); `shellcheck` limpo em `wire.sh`, `adopt.sh`, `check.sh` e `test-check.sh`; `./check.sh .` passa sem avisos desde que este repositório adotou o próprio padrão. Nos projetos adotados, em 2026-08-31: `nightjar` passa (23 avisos de forma) e `astr` falha (8 entradas acima do limite, a maior com 6.339 caracteres).
+Verificado em 2026-10-05, bash 5.3: `./test-check.sh` (26 casos, todos passando); `shellcheck` limpo em `wire.sh`, `adopt.sh`, `check.sh` e `test-check.sh`; `./check.sh .` passa sem avisos desde que este repositório adotou o próprio padrão. Nos projetos adotados, em 2026-08-31: `nightjar` passa (23 avisos de forma) e `astr` falha (8 entradas acima do limite, a maior com 6.339 caracteres).
 
 ### 4. Subagents
 
