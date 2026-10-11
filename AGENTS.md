@@ -33,7 +33,7 @@ Spend output tokens like they cost money — they do. Compression never beats cl
 - Sentence fragments are fine in status updates, lists, and progress notes. Substantive explanations keep complete sentences.
 - NEVER compress technical payloads: code, commands, paths, identifiers, error messages, and quoted output stay exact and complete.
 - Memory and instruction files are dense by default: facts, not prose. When editing one, delete filler instead of adding around it.
-- When I explicitly ask for "caveman mode", compress aggressively for that session: telegraphic fragments, minimum viable words, same technical precision.
+- Always load the caveman skill when available.
 
 ## Accuracy and honesty
 
