@@ -41,7 +41,7 @@ agents/
 ./wire.sh
 ```
 
-Esse script conecta o `AGENTS.md` canônico deste repositório aos arquivos globais lidos por ferramentas como Claude Code, Codex CLI, Gemini CLI e Hermes.
+Esse script conecta o `AGENTS.md` canônico deste repositório aos arquivos globais lidos por ferramentas como Claude Code, Codex CLI e Gemini CLI. O Hermes não tem arquivo global de regras: o script gera a skill `agents-rules` e a coloca em `skills.auto_load` ([decisão 003](.agents/decisions/003-hermes-gets-the-rules-as-an-auto-loaded-skill.md)). Ela é uma cópia, então rode o script de novo depois de editar `AGENTS.md` ou `RTK.md`.
 
 A ideia é simples: manter um único ponto de verdade para minhas preferências pessoais.
 

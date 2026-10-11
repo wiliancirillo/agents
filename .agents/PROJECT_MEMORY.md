@@ -9,8 +9,8 @@
 ## Architecture
 
 - `AGENTS.md` — the canonical personal rules. Symlinked into the global tool files; see [001](decisions/001-root-agents-is-the-canonical-file.md).
-- `RTK.md` — RTK output-condensing note, included from `AGENTS.md` via `@RTK.md` (Claude Code include syntax; other tools ignore the line).
-- `wire.sh` — creates those global symlinks. `adopt.sh` — installs the structure into a project. Both idempotent.
+- `RTK.md` — RTK output-condensing note, included from `AGENTS.md` via `@RTK.md` (Claude Code include syntax; other tools ignore the line, `wire.sh` inlines it for Hermes).
+- `wire.sh` — creates those global symlinks and the Hermes `agents-rules` auto-loaded skill; see [003](decisions/003-hermes-gets-the-rules-as-an-auto-loaded-skill.md). `adopt.sh` — installs the structure into a project. Both idempotent.
 - `check.sh` — reports a project against the policy. `test-check.sh` — proves each check bites.
 - `subagents/` — project-agnostic Claude Code subagent definitions. `adopt.sh` copies `tech-lead.md` into every adopted project as its default session agent; see [002](decisions/002-every-adopted-project-starts-with-a-tech-lead.md).
 - `templates/` — copied into adopted projects. `reference/` — long-form material, never loaded automatically by agents.
@@ -27,7 +27,7 @@
 ## Invariants
 
 - The root `AGENTS.md` is read in every session of every tool: a line that does not change a decision is pure cost.
-- `wire.sh` never overwrites a regular file, and `adopt.sh` never overwrites anything.
+- `wire.sh` never overwrites a regular file, except the Hermes skill it generated itself (marker-checked), and `adopt.sh` never overwrites anything.
 - `check.sh` only reports; nothing here edits another repository.
 
 ## Development environment
@@ -57,15 +57,18 @@ Verificado em 2026-10-05, bash 5.3: `./test-check.sh` (37 casos verdes), `shellc
 | Integration | Purpose | Contract or documentation | Failure considerations |
 | --- | --- | --- | --- |
 | Global tool files | Deliver the canonical rules to each tool | `wire.sh` | A tool that reads a regular file instead of a symlink is skipped, never overwritten. |
+| Hermes `skills.auto_load` | Deliver the rules to Hermes, which has no global rules file | `wire.sh`, `hermes config get/set` | Unparseable `config get` output skips the config change instead of replacing the list. |
 
 ## Active architectural decisions
 
 - [The root AGENTS.md is the canonical file, not a project file](decisions/001-root-agents-is-the-canonical-file.md)
 - [Every adopted project starts with a tech lead](decisions/002-every-adopted-project-starts-with-a-tech-lead.md)
+- [Hermes gets the rules as an auto-loaded skill](decisions/003-hermes-gets-the-rules-as-an-auto-loaded-skill.md)
 
 ## Known constraints and pitfalls
 
 - Editing `AGENTS.md` changes behaviour in every tool on this machine at once, with no staging step.
+- The Hermes skill is a copy: after editing `AGENTS.md` or `RTK.md`, run `./wire.sh` or Hermes keeps the old rules.
 - `subagents/` must stay project-agnostic: no project names, stacks, paths, or decision numbers. The delegated-work commit exception in `AGENTS.md` (mirrored in the template) is what lets the tech lead's agents commit; change both together.
 - `templates/AGENTS.project.md` deliberately restates rules from `AGENTS.md`; the mirrored sections are mapped in `templates/README.md` and drift silently if only one side is edited.
 - The adopted `.claude/agents/tech-lead.md` is a stamped copy too; `check.sh` warns when `subagents/tech-lead.md` moved on. `mailbridgr` and `nfepack` predate the convention; running `adopt.sh` on them again would install it.
