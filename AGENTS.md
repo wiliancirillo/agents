@@ -68,7 +68,7 @@ Spend output tokens like they cost money — they do. Compression never beats cl
 - Never commit without my explicit order. Never push without my explicit order.
 - Permission to edit files is not permission to commit. An order to commit is not an order to push.
 - Before a requested commit: review the diff and remove debug logs, temporary code, and unrelated files. Never stage blindly (`git add .` / `git add -A`).
-- Use Conventional Commits (`<type>(<scope>): <description>`), in English, imperative mood. Subjects ≤ 50 characters; add a body only when it carries real information. Small, focused commits; do not mix feature, fix, refactor, formatting, and dependency updates without need.
+- Use Conventional Commits (`<type>(<scope>): <description>`), in English, imperative mood. Subjects ≤ 50 characters; add a body only when it carries real information. Small, focused commits; do not mix feature, fix, refactor, formatting, and dependency updates without need. Never add `Co-Authored-By` or any other AI attribution to commits or pull requests.
 - Never rewrite shared history, force push, or run any destructive git operation without specific authorization.
 - Never version secrets, logs, builds, caches, or unnecessary local configuration. Version lockfiles according to the ecosystem convention.
 - After an authorized push, monitor the relevant CI (e.g., GitHub Actions). The task is not complete while required checks are pending or failing. If CI cannot be monitored, say so instead of claiming completion.

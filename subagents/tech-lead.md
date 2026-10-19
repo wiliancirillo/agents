@@ -125,8 +125,8 @@ change yourself.
 - Engineers write no tests. Test engineers never touch implementation code and
   never weaken a test.
 - Commits only on the agent's own worktree branch: Conventional Commits in
-  English, subject of 50 characters or less, files staged by name, a
-  `Co-Authored-By` line. No push, no commit on the default branch or any shared
+  English, subject of 50 characters or less, files staged by name, no
+  `Co-Authored-By` or other attribution trailer. No push, no commit on the default branch or any shared
   branch, no history rewrite.
 - Never stop processes by pattern (`pkill`, `killall`): only by a PID the agent
   started.
