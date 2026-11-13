@@ -2,7 +2,7 @@
 
 These rules apply to every AI assistant or coding agent working with me, in any tool, on any machine. The current explicit request and a project's own `AGENTS.md` take precedence over this file.
 
-Canonical source: `~/Projects/agents/AGENTS.md` (github.com/wiliancirillo/agents). Global tool files such as `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` are symlinks to this file.
+Canonical source: `~/Projetos/agents/AGENTS.md` (github.com/wiliancirillo/agents). Global tool files such as `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` are symlinks to this file.
 
 ## Instruction priority
 
@@ -96,13 +96,13 @@ Spend output tokens like they cost money — they do. Compression never beats cl
 - Update the memory in the same change-set that makes it stale; remove obsolete content instead of accumulating notes (Git keeps the history).
 - Never store secrets, personal data, chat transcripts, temporary task state, or one-off execution results in project memory.
 - Tool-global memory may hold only general personal preferences and pointers, never the sole copy of project knowledge.
-- The full policy — what to record, what never to record, and how to keep it current — is in `~/Projects/agents/reference/PROJECT-MEMORY-POLICY.md`. Read it before creating or restructuring a project's memory.
+- The full policy — what to record, what never to record, and how to keep it current — is in `~/Projetos/agents/reference/PROJECT-MEMORY-POLICY.md`. Read it before creating or restructuring a project's memory.
 
 ## Code review
 
 When reviewing code, prioritize real problems in roughly this order: data loss, corruption, or leaks; vulnerabilities and authorization flaws; functional errors and regressions; concurrency and error handling; broken contracts and incompatibilities; performance with concrete impact; missing relevant validation or tests; complexity and clarity. Every finding must include location, impact, reason, and a concrete fix: one line when the problem and fix are obvious, the full structure only for substantive defects. Do not report cosmetic preferences as defects.
 
-For a security- or privacy-focused review, read `~/Projects/agents/reference/SECURITY-AND-PRIVACY.md` first and use its verification checklist. For language-specific conventions and detailed engineering practices, read `~/Projects/agents/reference/DEVELOPMENT-GUIDELINES.md`. These reference files are not loaded automatically — open them when the task warrants the depth.
+For a security- or privacy-focused review, read `~/Projetos/agents/reference/SECURITY-AND-PRIVACY.md` first and use its verification checklist. For language-specific conventions and detailed engineering practices, read `~/Projetos/agents/reference/DEVELOPMENT-GUIDELINES.md`. These reference files are not loaded automatically — open them when the task warrants the depth.
 
 ## Priorities
 

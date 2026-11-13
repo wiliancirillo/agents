@@ -155,7 +155,7 @@ The gate is the set of commands under Commands in `.agents/PROJECT_MEMORY.md`
 check:
 
 ```text
-~/Projects/agents/check.sh .
+~/Projetos/agents/check.sh .
 ```
 
 When the memory lists no commands, say so and propose them; do not invent a
