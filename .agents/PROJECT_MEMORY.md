@@ -56,7 +56,7 @@ Verificado em 2026-10-05, bash 5.3: `./test-check.sh` (37 casos verdes), `shellc
 
 | Integration | Purpose | Contract or documentation | Failure considerations |
 | --- | --- | --- | --- |
-| Global tool files | Deliver the canonical rules to each tool | `wire.sh` | A tool that reads a regular file instead of a symlink is skipped, never overwritten. |
+| Global tool files | Deliver the canonical rules to each tool | `wire.sh` | A tool that reads a regular file instead of a symlink is skipped, never overwritten. Codex and Gemini are wired only when `~/.codex` / `~/.gemini` exist: re-run `wire.sh` after installing one. |
 | Hermes `skills.auto_load` | Deliver the rules to Hermes, which has no global rules file | `wire.sh`, `hermes config get/set` | Unparseable `config get` output skips the config change instead of replacing the list. |
 
 ## Active architectural decisions

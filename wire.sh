@@ -21,9 +21,14 @@ link() {
 }
 
 link "$HOME/.claude/CLAUDE.md"
-link "$HOME/.codex/AGENTS.md"
 
-# Gemini CLI reads GEMINI.md; only wire it if the tool is present.
+# Codex CLI and Gemini CLI: only wire them if the tool is present, so the
+# script never creates a config directory for a tool that is not installed.
+if [ -d "$HOME/.codex" ]; then
+  link "$HOME/.codex/AGENTS.md"
+fi
+
+# Gemini CLI reads GEMINI.md.
 if [ -d "$HOME/.gemini" ]; then
   link "$HOME/.gemini/GEMINI.md"
 fi
